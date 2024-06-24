@@ -1,0 +1,66 @@
+
+<header class="w-100 h-auto pb-5">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="Main navbar">
+        <div class="container-fluid my-4 mx-2">
+            <a class="navbar-brand" href="/">Recipes</a>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbar-content"
+                    aria-controls="navbar-content"
+                    aria-expanded="false"
+                    aria-label="Toggle navgation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse row justify-content-between" id="navbar-content">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0 col-12 col-md-6">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+
+{#                                <li class="nav-item">#}
+{#                                    <a href="/chat" class="nav-link">Chat</a>#}
+{#                                </li>#}
+{##}
+{#                                <li class="nav-item">#}
+{#                                    <a href="/settings" class="nav-link">Settings</a>#}
+{#                                </li>#}
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/account/profile" class="dropdown-item">Profile</a>
+                            </li>
+
+{#                                        <li>#}
+{#                                            <a href="/account/contacts" class="dropdown-item">Contacts</a>#}
+{#                                        </li>#}
+
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+
+                            <li>
+                                <a href="/login" class="dropdown-item">Login</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+                <form class="col-12 col-md-6" role="search">
+                    <div class="input-group w-100">
+                        <input type="search" class="form-control" name="search" placeholder="Search" aria-label="Search"/>
+
+                        <button type="submit" class="btn btn-light">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
