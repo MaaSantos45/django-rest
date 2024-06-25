@@ -1,0 +1,25 @@
+[project]
+name = "django-base"
+version = "1.0.0"
+description = "A django project for learning propouses"
+authors = [
+    { name = "Matheus Santos", email = "maasantos776@gmail.com" }
+]
+dependencies = [
+    "python-dotenv",
+    "Faker",
+    "Django",
+    "pillow",
+    "setuptools",
+    "wheel",
+]
+
+[project.optional-dependecies]
+test = [
+    "pytest",
+    "pytest-django",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
