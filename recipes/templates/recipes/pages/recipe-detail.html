@@ -1,0 +1,100 @@
+{% extends 'global/pages/base.html' %}
+
+{% block content %}
+    <section class="container-fluid g-5 mt-5 min-vh-100">
+{#        {{ recipe }}#}
+
+        <div id="carouselExampleCaptions" class="carousel slide">
+
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    {% if recipe.cover %}
+                        <img src="{{ recipe.cover.url }}" class="img-fluid d-block w-100" alt="Recipe Image">
+                    {% else %}
+                        <svg class="placeholder" width="100%" height="400">
+                            <rect class="d-block" width="100%" height="100%" fill="#777"></rect>
+                        </svg>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-fluid text-center">
+            <h5 class="">{{ recipe.title }}</h5>
+            <p class="">{{ recipe.description }}</p>
+
+            <table class="table table-borderless table-responsive text-center">
+                <tbody class="table-secondary">
+                    <tr>
+                        <td>
+                            <em>
+                                <span class="small"><i class="bi bi-person-fill "></i></span>
+                                <span class="small">
+                                    {% if recipe.author.first_name %}
+                                        {{ recipe.author.first_name }} {{ recipe.author.last_name }}
+                                    {% else %}
+                                        {{ recipe.author.username }}
+                                    {% endif %}
+                                </span>
+                            </em>
+                        </td>
+
+                        <td>
+                            <em>
+                                <span class="small"><i class="bi bi-calendar3 "></i></span>
+                                <span class="small">{{ recipe.created_at|date:"d/m/Y à\s H:i" }}</span>
+                            </em>
+                        </td>
+
+                        <td>
+                            <em>
+                                <strong>
+                                    <a class="link-dark link-underline link-underline-opacity-0"
+                                        href="
+                                            {% if recipes.category %}
+                                                {% url "recipes:category" id_category=recipe.category.id %}
+                                            {% else %}
+                                                {% url 'recipes:home' %}
+                                            {% endif %}
+                                        ">
+                                        <span class="small"><i class="bi bi-tags-fill"></i></span>
+                                        <span class="small">{% if recipe.category %}{{ recipe.category }}{% endif %}</span>
+                                    </a>
+                                </strong>
+                            </em>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="3">
+                            <table class="table table-borderless text-center w-100">
+                                <thead>
+                                    <tr>
+                                        <th><i class="bi bi-stopwatch"></i> Preparo</th>
+                                        <th><i class="bi bi-cake2"></i> Porções</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>{{ recipe.preparation_time }} {{ recipe.preparation_time_unit }}</td>
+                                        <td>{{ recipe.servings }} {{ recipe.servings_unit }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="container mt-5 p-3">
+            {% if recipe.preparation_steps_is_html %}
+                {{ recipe.preparation_steps|safe }}
+            {% else %}
+                {{ recipe.preparation_steps|linebreaksbr }}
+            {% endif %}
+        </div>
+    </section>
+{% endblock content %}

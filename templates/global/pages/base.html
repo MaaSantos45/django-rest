@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+{% include 'global/partials/head.html' %}
+
+<body>
+
+    <main class="container-fluid g-0 w-100 min-vh-100">
+        {% block header %}
+            {% include 'global/partials/header.html' %}
+        {% endblock header %}
+
+        {% block content %}
+
+        {% endblock content %}
+
+        {% block footer %}
+            {% include 'global/partials/footer.html' %}
+        {% endblock footer %}
+    </main>
+
+    <script src="{% static 'global/js/popper.min.js' %}" crossorigin="anonymous"></script>
+    <script src="{% static 'global/js/bootstrap.min.js' %}" crossorigin="anonymous"></script>
+    <script src="{% static 'global/js/init-bootstrap.js' %}" crossorigin="anonymous"></script>
+</body>
+</html>

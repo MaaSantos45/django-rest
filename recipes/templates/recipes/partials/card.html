@@ -1,63 +1,81 @@
 
 <div class="col-12 col-md-6 col-xl-4">
     <div class="card w-75 m-auto mb-5 shadow-lg shadow ">
-        <img class="card-img card-img-top w-100" alt="Imagem" src="{{ img }}">
+        <a href="{% url 'recipes:recipe_details' recipe.id %}">
+
+            {% if recipe.cover %}
+                <img class="card-img card-img-top w-100" alt="Imagem" src="{{ recipe.cover.url }}">
+            {% else %}
+                <svg class="placeholder disabled w-100" aria-disabled="true">
+                    <rect class="d-block" width="100%" height="100%" fill="#868e96"></rect>
+                </svg>
+            {% endif %}
+        </a>
+
+
 
         <div class="card-body w-100">
-            <h5 class="card-title text-center">Nome do Prato</h5>
-            <p class="card-text">Descrição do prato. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci amet obcaecati odio placeat possimus!</p>
+            <h5 class="card-title text-center">{{ recipe.title }}</h5>
+            <p class="card-text">{{ recipe.description }}</p>
         </div>
 
         <div class="card-body row row-cols-3 justify-content-between justify-content-lg-around small text-nowrap w-100 g-0 p-1">
             <div class="col-auto text-secondary">
                 <em>
                     <span class="small"><i class="bi bi-person-fill "></i></span>
-                    <span class="small">Autor</span>
+                    <span class="small">
+                        {% if recipe.author.first_name %}
+                            {{ recipe.author.first_name }} {{ recipe.author.last_name }}
+                        {% else %}
+                            {{ recipe.author.username }}
+                        {% endif %}
+                    </span>
                 </em>
             </div>
             <div class="col-auto text-secondary">
                 <em>
                     <span class="small"><i class="bi bi-calendar3 "></i></span>
-                    <span class="small">Data da publicação</span>
+                    <span class="small">{{ recipe.created_at|date:"d/m/Y \a\t H:i" }}</span>
                 </em>
             </div>
             <div class="col-auto">
                 <em>
                     <strong>
-                        <a class="link-dark link-underline link-underline-opacity-0" href="#">
+                        <a class="link-dark link-underline link-underline-opacity-0"
+                            href="
+                                {% if recipe.category %}
+                                    {% url "recipes:category" id_category=recipe.category.id %}
+                                {% else %}
+                                    {% url 'recipes:home' %}
+                                {% endif %}
+                            ">
                             <span class="small"><i class="bi bi-tags-fill"></i></span>
-                            <span class="small">Categoria</span>
+                            <span class="small">{% if recipe.category %}{{ recipe.category }}{% endif %}</span>
                         </a>
                     </strong>
                 </em>
             </div>
         </div>
 
-{#        <ul class="list-group list-group-horizontal w-100 small border-0">#}
-{#            <li class="list-group-item border-0"></li>#}
-{#            <li class="list-group-item border-0 w-50"></li>#}
-{#            <li class="list-group-item border-0"></li>#}
-{#        </ul>#}
-
         <div class="card-body">
             <table class="table table-borderless text-center">
                 <thead>
                     <tr>
-                        <th><i class="bi bi-stopwatch"></i> Preparo</th>
-                        <th><i class="bi bi-cake2"></i> Porções</th>
+                        <th><i class="bi bi-stopwatch"></i> Preparation</th>
+                        <th><i class="bi bi-cake2"></i> Portions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>0 Minutos</td>
-                        <td>0 Porções</td>
+                        <td>{{ recipe.preparation_time }} {{ recipe.preparation_time_unit }}</td>
+                        <td>{{ recipe.servings }} {{ recipe.servings_unit }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <div class="text-center">
-            <a href="#" class="btn w-100 g-0 card-body w-100 bg-black text-white link-underline-opacity-0">
+            <a href="{% url 'recipes:recipe_details' recipe.id %}" class="btn w-100 g-0 card-body w-100 bg-black text-white link-underline-opacity-0">
                 Ver mais...
             </a>
         </div>
