@@ -50,9 +50,9 @@
                         </ul>
                     </li>
                 </ul>
-                <form class="col-12 col-md-6" role="search">
+                <form class="col-12 col-md-6" role="search" action="{% url "recipes:search" %}" method="GET">
                     <div class="input-group w-100">
-                        <input type="search" class="form-control" name="search" placeholder="Search" aria-label="Search"/>
+                        <input type="search" class="form-control" name="q" placeholder="Search" value="{{ q_term }}" aria-label="Search" required/>
 
                         <button type="submit" class="btn btn-light">
                             <i class="bi bi-search"></i>
