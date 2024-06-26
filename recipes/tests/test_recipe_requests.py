@@ -28,6 +28,13 @@ class RecipeRequestTests(RecipeTestBase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'No Recipes published.', response.content)
 
+    def test_recipe_request_category_with_recipes(self):
+        title = "Test Title Recipe"
+        self.make_recipe(title=title)
+        response = self.client.get(reverse('recipes:category', kwargs={'id_category': 1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(title.encode(), response.content)
+
     def test_recipe_request_recipe_without_recipe(self):
         response = self.client.get(reverse('recipes:recipe_details', kwargs={'id_recipe': 1}))
         self.assertEqual(response.status_code, 404)
@@ -45,3 +52,21 @@ class RecipeRequestTests(RecipeTestBase):
         response = self.client.get(reverse('recipes:recipe_details', kwargs={'id_recipe': 1}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['recipe'].title, 'Test Recipe')
+
+    def test_recipe_request_home_with_recipe_not_published(self):
+        self.make_recipe(is_published=False)
+        response = self.client.get(reverse('recipes:home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'No Recipes published.', response.content)
+
+    def test_recipe_request_category_with_recipe_not_published(self):
+        self.make_recipe(is_published=False)
+        response = self.client.get(reverse('recipes:category', kwargs={'id_category': 1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'No Recipes published.', response.content)
+
+    def test_recipe_request_recipe_with_recipe_not_published(self):
+        self.make_recipe(is_published=False)
+
+        response = self.client.get(reverse('recipes:recipe_details', kwargs={'id_recipe': 1}))
+        self.assertEqual(response.status_code, 404)

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=120)
+    name = models.CharField(max_length=60)
 
     def __str__(self):
         return self.name
@@ -19,12 +19,12 @@ class Recipe(models.Model):
     title = models.CharField(max_length=65)
     description = models.CharField(max_length=165)
     preparation_time = models.IntegerField()
-    preparation_time_unit = models.CharField(max_length=100, choices={'minutes': "Minutes", 'hours': "Hours"})
+    preparation_time_unit = models.CharField(max_length=10, choices={'minutes': "Minutes", 'hours': "Hours"})
     preparation_steps = models.TextField()
-    preparation_steps_is_html = models.BooleanField()
+    preparation_steps_is_html = models.BooleanField(default=False)
     servings = models.IntegerField()
-    servings_unit = models.CharField(max_length=100, choices={'portion': "Portion", 'people': "People"})
-    is_published = models.BooleanField()
+    servings_unit = models.CharField(max_length=10, choices={'portion': "Portion", 'people': "People"})
+    is_published = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     cover = models.ImageField(upload_to="recipes/covers/%Y/%m/%d", blank=True)

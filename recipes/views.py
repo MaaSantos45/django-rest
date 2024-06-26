@@ -16,7 +16,7 @@ def home(request, id_category=None):
 
 
 def recipe_detail(request, id_recipe):
-    recipe = models.Recipe.objects.filter(id=id_recipe).first()
+    recipe = models.Recipe.objects.filter(id=id_recipe, is_published=True).first()
     if not recipe:
         raise Http404('No recipe found')
     return render(request, "recipes/pages/recipe-detail.html", context={"recipe": recipe})

@@ -6,9 +6,8 @@ authors = [
     { name = "Matheus Santos", email = "maasantos776@gmail.com" }
 ]
 dependencies = [
-    "python-dotenv",
-    "Faker",
     "Django",
+    "python-dotenv",
     "pillow",
     "setuptools",
     "wheel",
@@ -18,6 +17,11 @@ dependencies = [
 test = [
     "pytest",
     "pytest-django",
+    "coverage",
+    "parameterized",
+]
+dev = [
+    "Faker",
 ]
 
 [build-system]
