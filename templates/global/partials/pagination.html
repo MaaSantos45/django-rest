@@ -1,0 +1,43 @@
+{% load query_params %}
+
+{% if pagination.has_other_pages %}
+    <nav class="w-100" aria-label="Page navigation example">
+        <ul class="pagination flex-wrap justify-content-end">
+            <li class="page-item">
+                <a class="page-link" href="{% add_query_params request page=1 %}" aria-label="First">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            {% if pagination.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="{% add_query_params request page=pagination_range.current_page|add:-1 %}">
+                        Previous
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for page in pagination_range.pagination %}
+                <li class="page-item {% if page == pagination_range.current_page %} active {% endif %}">
+                    <a class="page-link" href="{% add_query_params request page=page %}">
+                        {{ page }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            {% if pagination.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{% add_query_params request page=pagination_range.current_page|add:1 %}">
+                        Next
+                    </a>
+                </li>
+            {% endif %}
+
+            <li class="page-item">
+                <a class="page-link" href="{% add_query_params request page=pagination_range.total_pages %}" aria-label="Last">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endif %}

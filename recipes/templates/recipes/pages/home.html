@@ -2,7 +2,11 @@
 
 {% block content %}
     <section class="container-fluid g-5 mt-5 min-vh-100">
-        <div class="row justify-content-center">
+        <div class="row w-100">
+            {% include 'global/partials/pagination.html' with pagination=recipes pagination_range=pagination_range %}
+        </div>
+
+        <div class="row w-100 justify-content-center">
 
             {% for recipe in recipes %}
                 {% include 'recipes/partials/card.html' with recipe=recipe %}
@@ -11,6 +15,10 @@
                     No Recipes published.
                 </h1>
             {% endfor %}
+        </div>
+
+        <div class="row w-100">
+            {% include 'global/partials/pagination.html' with pagination=recipes pagination_range=pagination_range %}
         </div>
     </section>
 {% endblock content %}

@@ -1,19 +1,22 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse, Http404
-from utils.recipes.factory import make_recipes
+from utils.pagination import make_pagination
 from . import models
 
 # Create your views here.
 
 
 def home(request, id_category=None):
-
     recipes = models.Recipe.objects.all().order_by('-created_at').order_by('-updated_at')
     recipes = recipes.filter(is_published=True)
+
     if id_category is not None:
         recipes = recipes.filter(category__id=id_category)
-    return render(request, "recipes/pages/home.html", context={'recipes': recipes})
+
+    page_obj, pagination_range = make_pagination(request, recipes)
+
+    return render(request, "recipes/pages/home.html", context={'recipes': page_obj, 'pagination_range': pagination_range})
 
 
 def recipe_detail(request, id_recipe):
@@ -42,4 +45,10 @@ def search(request):
             Q(category__name__icontains=term)
         )
 
-    return render(request, "recipes/pages/home.html", context={"recipes": recipes, "q_term": q_term})
+    page_obj, pagination_range = make_pagination(request, recipes)
+
+    return render(request, "recipes/pages/home.html", context={
+        "recipes": page_obj,
+        "q_term": q_term,
+        'pagination_range': pagination_range
+    })

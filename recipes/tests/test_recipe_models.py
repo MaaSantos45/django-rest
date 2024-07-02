@@ -53,11 +53,19 @@ class RecipeModelTest(RecipeTestBase):
         with self.assertRaises(e.ValidationError):
             self.recipe.full_clean()
 
-    @skip('Need to validate choices')
     def test_recipe_model_fields_choice(self):
         self.recipe.preparation_time_unit = "hours"
+        self.recipe.servings_unit = "people"
 
-        # self.assertRaises(django.core.exceptions.ValidationError, self.recipe.full_clean)
+        self.recipe.full_clean()
+        self.recipe.save()
+
+        self.recipe.preparation_time_unit = "out_choice"
+        with self.assertRaises(e.ValidationError):
+            self.recipe.full_clean()
+
+        self.recipe.preparation_time_unit = "minutes"
+        self.recipe.servings_unit = "out_choice"
         with self.assertRaises(e.ValidationError):
             self.recipe.full_clean()
 
