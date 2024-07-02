@@ -1,0 +1,19 @@
+{% load query_filters %}
+
+<div class="position-absolute mt-5 me-0 me-sm-5 top-0 end-0 z-3">
+    {% if messages %}
+        <div class="toast-container position-static opacity-100">
+            {% for msg in messages %}
+                <div class="toast text-bg-{{ msg.tags }}" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">{{ msg.tags|get_item }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        <p class="g-0">{{ msg }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>

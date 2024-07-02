@@ -2,6 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse, Http404
 from utils.pagination import make_pagination
+from django.contrib import messages
 from . import models
 
 # Create your views here.
