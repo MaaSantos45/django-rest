@@ -44,11 +44,35 @@
                             </li>
 
                             <li>
-                                <a href="/login" class="dropdown-item">Login</a>
+                                <a href="{% url 'authors:register' %}" class="dropdown-item">Register</a>
+                            </li>
+
+                            <li>
+                                {% if request.user.is_authenticated %}
+                                    <form action="{% url 'authors:logout' %}" method="POST">
+                                        {% csrf_token %}
+                                        <input class="btn btn-link link-opacity-50-hover link-dark link-underline link-underline-opacity-0" type="submit" value="Logout">
+                                    </form>
+                                {% else %}
+                                    <a href="{% url 'authors:login' %}" class="dropdown-item">Login</a>
+                                {% endif %}
                             </li>
 
                         </ul>
                     </li>
+
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                            <span class="nav-link active">
+                                Welcome
+                                {% if request.user.first_name %}
+                                    {{ request.user.first_name }}
+                                {% else %}
+                                    {{ request.user.username }}
+                                {% endif %}
+                            </span>
+                        </li>
+                    {% endif %}
                 </ul>
                 <form class="col-12 col-md-6" role="search" action="{% url "recipes:search" %}" method="GET">
                     <div class="input-group w-100">

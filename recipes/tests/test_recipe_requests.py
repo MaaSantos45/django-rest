@@ -9,7 +9,7 @@ class RecipeRequestHomeTests(RecipeTestBase):
     def test_recipe_request_home_without_recipes(self):
         response = self.client.get(reverse('recipes:home'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'No Recipes published.', response.content)
+        self.assertIn(b'No Recipes Published.', response.content)
 
     def test_recipe_request_home_with_recipes(self):
         self.make_recipe()
@@ -23,7 +23,7 @@ class RecipeRequestHomeTests(RecipeTestBase):
         self.make_recipe(is_published=False)
         response = self.client.get(reverse('recipes:home'))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'No Recipes published.', response.content)
+        self.assertIn(b'No Recipes Published.', response.content)
 
     @patch('utils.pagination.PER_PAGE', new=5)
     def test_recipe_request_home_is_paginated(self):
@@ -34,7 +34,7 @@ class RecipeRequestHomeTests(RecipeTestBase):
         paginator = response.context['recipes'].paginator
 
         self.assertEqual(paginator.num_pages, 4)
-        self.assertEqual(paginator.num_pages, 5)
+        self.assertEqual(paginator.per_page, 5)
         self.assertEqual(len(paginator.get_page(1)), 5)
 
 
@@ -42,7 +42,7 @@ class RecipeRequestCategoryTests(RecipeTestBase):
     def test_recipe_request_category_without_recipes(self):
         response = self.client.get(reverse('recipes:category', kwargs={'id_category': 1}))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'No Recipes published.', response.content)
+        self.assertIn(b'No Recipes Published.', response.content)
 
     def test_recipe_request_category_with_recipes(self):
         title = "Test Title Recipe"
@@ -55,7 +55,7 @@ class RecipeRequestCategoryTests(RecipeTestBase):
         self.make_recipe(is_published=False)
         response = self.client.get(reverse('recipes:category', kwargs={'id_category': 1}))
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'No Recipes published.', response.content)
+        self.assertIn(b'No Recipes Published.', response.content)
 
 
 class RecipeRequestDetailTests(RecipeTestBase):
@@ -97,7 +97,7 @@ class RecipeRequestSearchTests(RecipeTestBase):
     def test_recipe_request_search_without_recipes(self):
         response = self.client.get(reverse('recipes:search'), data={'q': 'testnofound'})
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'No Recipes published.', response.content)
+        self.assertIn(b'No Recipes Published.', response.content)
 
     def test_recipe_request_search_with_recipes(self):
         recipe1 = self.make_recipe(author_data={'username': 'Other Author'})

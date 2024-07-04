@@ -46,7 +46,7 @@ def search(request):
             Q(category__name__icontains=term)
         )
 
-    page_obj, pagination_range = make_pagination(request, recipes)
+    page_obj, pagination_range = make_pagination(request, recipes, per_page=10, qtd_pages=10)
 
     return render(request, "recipes/pages/home.html", context={
         "recipes": page_obj,

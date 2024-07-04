@@ -1,0 +1,18 @@
+<div class="row w-100 justify-content-center">
+    <form class="col-12 col-md-6" action="{{ form_action }}" method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="mb-3 m-auto w-100">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+
+                {% if field.help_text %}
+                    <p>{{ field.help_text }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button class="btn btn-primary rounded rounded-5" type="submit">Submit</button>
+    </form>
+</div>
