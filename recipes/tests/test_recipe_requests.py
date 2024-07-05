@@ -1,8 +1,9 @@
 from django.urls import reverse, resolve
 from recipes import views, models
-import utils
 from unittest.mock import patch
 from . import RecipeTestBase
+import pytest
+import utils
 
 
 class RecipeRequestHomeTests(RecipeTestBase):
@@ -26,9 +27,9 @@ class RecipeRequestHomeTests(RecipeTestBase):
         self.assertIn(b'No Recipes Published.', response.content)
 
     @patch('utils.pagination.PER_PAGE', new=5)
+    @pytest.mark.slow
     def test_recipe_request_home_is_paginated(self):
-        for i in list(range(20)):
-            self.make_recipe({"username": f"TestPage-{i}"}, slug=f"test-slug-{i}")
+        self.make_recipes_qtd(20)
 
         response = self.client.get(reverse("recipes:home"))
         paginator = response.context['recipes'].paginator
@@ -77,6 +78,7 @@ class RecipeRequestDetailTests(RecipeTestBase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['recipe'].title, 'Test Recipe')
 
+    @pytest.mark.slow
     def test_recipe_request_recipe_with_recipe_not_published(self):
         self.make_recipe(is_published=False)
 

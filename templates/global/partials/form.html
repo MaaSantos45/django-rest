@@ -1,5 +1,5 @@
 <div class="row w-100 justify-content-center">
-    <form class="col-12 col-md-6" action="{{ form_action }}" method="POST">
+    <form class="col-12 col-md-6" action="{{ form_action }}" method="POST" id="form">
         {% csrf_token %}
 
         {% for field in form %}
@@ -13,6 +13,6 @@
             </div>
         {% endfor %}
 
-        <button class="btn btn-primary rounded rounded-5" type="submit">Submit</button>
+        <button class="btn btn-primary rounded rounded-5" type="submit" id="submit-form">Submit</button>
     </form>
 </div>

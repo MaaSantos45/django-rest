@@ -19,6 +19,7 @@ test = [
     "pytest-django",
     "coverage",
     "parameterized",
+    "selenium"
 ]
 dev = [
     "Faker",

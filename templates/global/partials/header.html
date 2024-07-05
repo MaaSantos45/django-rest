@@ -49,9 +49,9 @@
 
                             <li>
                                 {% if request.user.is_authenticated %}
-                                    <form action="{% url 'authors:logout' %}" method="POST">
+                                    <form action="{% url 'authors:logout' %}" id="form-logout" method="POST">
                                         {% csrf_token %}
-                                        <input class="btn btn-link link-opacity-50-hover link-dark link-underline link-underline-opacity-0" type="submit" value="Logout">
+                                        <input class="btn btn-link link-opacity-50-hover link-dark link-underline link-underline-opacity-0" id="submit-logout" type="submit" value="Logout">
                                     </form>
                                 {% else %}
                                     <a href="{% url 'authors:login' %}" class="dropdown-item">Login</a>
@@ -74,11 +74,11 @@
                         </li>
                     {% endif %}
                 </ul>
-                <form class="col-12 col-md-6" role="search" action="{% url "recipes:search" %}" method="GET">
+                <form class="col-12 col-md-6" role="search" action="{% url "recipes:search" %}" id="form-search" method="GET">
                     <div class="input-group w-100">
-                        <input type="search" class="form-control" name="q" placeholder="Search" value="{{ q_term }}" aria-label="Search" required/>
+                        <input type="search" class="form-control" id="search-input" name="q" placeholder="Search" value="{{ q_term }}" aria-label="Search" required/>
 
-                        <button type="submit" class="btn btn-light">
+                        <button type="submit" id="submit-search" class="btn btn-light">
                             <i class="bi bi-search"></i>
                         </button>
                     </div>

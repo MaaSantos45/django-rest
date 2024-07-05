@@ -1,6 +1,7 @@
 from . import RecipeTestBase
 from utils.pagination import make_pagination_range
 from django.urls import reverse
+import pytest
 
 
 class RecipePaginationTest(RecipeTestBase):
@@ -56,9 +57,9 @@ class RecipePaginationTest(RecipeTestBase):
         )
         self.assertEqual(list(range(11, 21)), pagination['pagination'])
 
+    @pytest.mark.slow
     def test_recipe_pagination_request_page_invalid(self):
-        for i in list(range(20)):
-            self.make_recipe({"username": f"TestPage-{i}"}, slug=f"test-slug-{i}")
+        self.make_recipes_qtd(20)
 
         response = self.client.get(reverse("recipes:home"), data={"page": "string"})
         current_page = response.context['pagination_range']['current_page']
