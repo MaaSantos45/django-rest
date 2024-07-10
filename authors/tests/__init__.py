@@ -1,9 +1,9 @@
 from django.test import TestCase
 
-from recipes import models
+from recipes import models, tests
 
 
-class AuthorTestBase(TestCase):
+class AuthorTestBase(TestCase, tests.RecipeMixin):
     def setUp(self):
         return super().setUp()
 

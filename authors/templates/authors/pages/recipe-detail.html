@@ -1,0 +1,45 @@
+{% extends 'global/pages/base.html' %}
+
+{% block content %}
+    <section class="container-fluid g-5 mt-5 min-vh-100">
+
+        <div id="carouselExampleCaptions" class="carousel slide col col-md-6 mx-auto">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    {% if recipe.cover %}
+                        <img src="{{ recipe.cover.url }}" class="img-fluid d-flex w-100" alt="Recipe Image">
+                    {% else %}
+                        <svg class="placeholder" width="100%" height="400">
+                            <rect class="d-block" width="100%" height="100%" fill="#777"></rect>
+                        </svg>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="container text-center">
+            <h5>
+                {{ recipe.title }}
+                {% if recipe.is_published %}
+                    <i class="bi bi-patch-check-fill text-success"></i> Is published
+                {% endif %}
+            </h5>
+        </div>
+
+        {% include 'global/partials/form.html' with form=form %}
+
+        {% if recipe %}
+            <div class="row mt-2 w-100 justify-content-center">
+                <form class="col-12 col-md-6 delete-submit" action="{% url 'authors:delete_recipe' recipe.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                </form>
+            </div>
+        {% endif %}
+    </section>
+{% endblock content %}
+
+{% block script %}
+    {% load static %}
+    <script src="{% static 'global/js/delete-confirm.js' %}" crossorigin="anonymous"></script>
+{% endblock %}

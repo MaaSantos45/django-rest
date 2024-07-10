@@ -32,7 +32,15 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="/account/profile" class="dropdown-item">Profile</a>
+                                <a href="
+                                    {% if request.user.is_authenticated %}
+                                        {% url 'authors:profile' %}
+                                    {% else %}
+                                        {% url 'authors:login' %}
+                                    {% endif %}"
+                                    class="dropdown-item">
+                                    Profile
+                                </a>
                             </li>
 
 {#                                        <li>#}

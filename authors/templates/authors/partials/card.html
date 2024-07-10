@@ -1,7 +1,7 @@
 
-<div class="col-12 col-md-6 col-xl-4">
+<div class="col-12 col-md-6">
     <div class="card w-75 m-auto mb-5 shadow-lg shadow ">
-        <a href="{% url 'recipes:recipe_details' recipe.id %}">
+        <a href="{% url 'authors:edit_recipe' recipe.id %}">
 
             {% if recipe.cover %}
                 <img class="card-img card-img-top w-100" alt="Imagem" src="{{ recipe.cover.url }}">
@@ -12,14 +12,17 @@
             {% endif %}
         </a>
 
-
-
         <div class="card-body w-100">
-            <h5 class="card-title text-center">{{ recipe.title }}</h5>
+            <h5 class="card-title text-center">
+                {{ recipe.title }}
+                {% if recipe.is_published %}
+                    <i class="bi bi-patch-check-fill text-success"></i> Is published
+                {% endif %}
+            </h5>
             <p class="card-text">{{ recipe.description }}</p>
         </div>
 
-        <div class="card-body row row-cols-3 justify-content-between justify-content-lg-around small text-nowrap w-100 g-0 p-1">
+        <div class="card-body row row-cols-2 justify-content-between justify-content-lg-around small text-nowrap w-100 g-0 p-1">
             <div class="col-auto text-secondary">
                 <em>
                     <span class="small"><i class="bi bi-person-fill "></i></span>
@@ -58,7 +61,7 @@
         </div>
 
         <div class="card-body">
-            <table class="table table-borderless text-center">
+            <table class="table table-borderless table-responsive text-center">
                 <thead>
                     <tr>
                         <th><i class="bi bi-stopwatch"></i> Preparation</th>
@@ -75,7 +78,7 @@
         </div>
 
         <div class="text-center">
-            <a href="{% url 'recipes:recipe_details' recipe.id %}" class="btn w-100 g-0 card-body w-100 bg-black text-white link-underline-opacity-0">
+            <a href="{% url 'authors:edit_recipe' recipe.id %}" class="btn w-100 g-0 card-body w-100 bg-black text-white link-underline-opacity-0">
                 See More...
             </a>
         </div>

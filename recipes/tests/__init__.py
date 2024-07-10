@@ -30,15 +30,20 @@ class RecipeMixin:
             preparation_steps="Lorem Ipsu...",
             preparation_steps_is_html=False,
             is_published=True,
+            current_user=None,
     ):
-        if author_data is None:
-            author_data = {}
+        if current_user is None:
+            if author_data is None:
+                author_data = {}
+            author = self.make_author(**author_data)
+        else:
+            author = current_user
 
         if category_data is None:
             category_data = {}
 
         return models.Recipe.objects.create(
-            author=self.make_author(**author_data),
+            author=author,
             category=self.make_category(**category_data),
             title=title,
             description=description,
@@ -52,10 +57,12 @@ class RecipeMixin:
             is_published=is_published,
         )
 
-    def make_recipes_qtd(self, qtd=10):
+    def make_recipes_qtd(self, qtd=10, user=None):
         recipes = []
+        kwargs = {}
         for i in range(qtd):
-            kwargs = {"author_data": {"username": f"TestPage-{i}"}, "title": f"Test Recipe {i}", "slug": f"test-slug-{i}"}
+            kwargs['current_user'] = user
+            kwargs.update({"author_data": {"username": f"TestPage-{i}"}, "title": f"Test Recipe {i}", "slug": f"test-slug-{i}"})
             recipes.append(self.make_recipe(**kwargs))
         return recipes
 

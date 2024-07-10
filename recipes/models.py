@@ -12,11 +12,11 @@ class Category(models.Model):
 
 
 class Recipe(models.Model):
-    slug = models.SlugField(unique=True)
+    title = models.CharField(max_length=65)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    slug = models.SlugField(unique=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
-    title = models.CharField(max_length=65)
     description = models.CharField(max_length=165)
     preparation_time = models.IntegerField()
     preparation_time_unit = models.CharField(max_length=10, choices={'minutes': "Minutes", 'hours': "Hours"})

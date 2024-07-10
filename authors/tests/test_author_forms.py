@@ -176,3 +176,101 @@ class AuthorFormLoginTest(AuthorTestBase):
         expected = html.escape('fields: Username or password is incorrect.')
         response = self.client.post(reverse('authors:login'), data=self.form_data)
         self.assertIn(expected, response.content.decode())
+
+
+class AuthorRecipeFormTest(AuthorTestBase):
+    def setUp(self):
+        self.make_category()
+        self.client.post(reverse('authors:register'), {
+            'first_name': 'New',
+            'last_name': 'User Test',
+            'username': 'JohnTest',
+            'email': 'e-mail@test.com',
+            'password': 'Str0ngP@ss',
+            'confirm_password': 'Str0ngP@ss',
+        })
+
+        self.login_form_data = {
+            'username': 'JohnTest',
+            'password': 'Str0ngP@ss',
+        }
+
+        self.form_data = {
+            'title': 'Recipe Title',
+            'description': 'Recipe Description',
+            'category': 1,
+            'preparation_time': 5,
+            'preparation_time_unit': 'minutes',
+            'preparation_steps': 'This is the preparation steps for the recipe test.',
+            'servings': 1,
+            'servings_unit': 'portion',
+        }
+        return super().setUp()
+
+    def tearDown(self):
+        self.client.post(reverse('authors:logout'))
+        return super().tearDown()
+
+    @parameterized.expand([
+        ('title', 'This field is required.'),
+        ('description', 'This field is required.'),
+        ('category', 'This field is required.'),
+        ('preparation_time', 'This field is required.'),
+        ('preparation_time_unit', 'This field is required.'),
+        ('preparation_steps', 'This field is required.'),
+        ('servings', 'This field is required.'),
+        ('servings_unit', 'This field is required.'),
+    ])
+    def test_form_fields_empty(self, field, expected):
+        self.form_data[field] = ''
+        expected_content = f"{field}: {expected}"
+        self.client.login(**self.login_form_data)
+
+        response = self.client.post(reverse('authors:create_recipe'), data=self.form_data)
+        self.assertIn(expected_content, response.content.decode())
+
+    @parameterized.expand([
+        ('preparation_time', 'Preparation time must be greater than 0.'),
+        ('servings', 'Servings must be greater than 0.'),
+    ])
+    def test_form_fields_negative(self, field, expected):
+        self.form_data[field] = -1
+        expected_content = f"{field}: {expected}"
+        self.client.login(**self.login_form_data)
+
+        response = self.client.post(reverse('authors:create_recipe'), data=self.form_data)
+        self.assertIn(expected_content, response.content.decode())
+
+    @parameterized.expand([
+        ('preparation_time', 'Enter a whole number., Preparation time must be greater than 0.'),
+        ('servings', 'Enter a whole number., Servings must be greater than 0.'),
+    ])
+    def test_form_fields_invalids(self, field, expected):
+        self.form_data[field] = 'ab'
+        expected_content = f"{field}: {expected}"
+        self.client.login(**self.login_form_data)
+
+        response = self.client.post(reverse('authors:create_recipe'), data=self.form_data)
+        self.assertIn(expected_content, response.content.decode())
+
+    def test_form_fields_short(self):
+        self.form_data['title'] = 'A' * 4
+        self.form_data['description'] = 'A' * 4
+
+        expected_content_title = f"title: Title must be at least 5 characters."
+        expected_content_description = f"description: Description must be at least 5 characters."
+        self.client.login(**self.login_form_data)
+
+        response = self.client.post(reverse('authors:create_recipe'), data=self.form_data)
+        self.assertIn(expected_content_title, response.content.decode())
+        self.assertIn(expected_content_description, response.content.decode())
+
+    def test_form_fields_equal(self):
+        self.form_data['title'] = 'A' * 5
+        self.form_data['description'] = 'A' * 5
+
+        expected_content = f"fields: Description cannot be equal to title."
+        self.client.login(**self.login_form_data)
+
+        response = self.client.post(reverse('authors:create_recipe'), data=self.form_data)
+        self.assertIn(expected_content, response.content.decode())

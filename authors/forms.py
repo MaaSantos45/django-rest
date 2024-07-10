@@ -2,7 +2,9 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.core import exceptions as exp
+from recipes import models as recipe_models
 from secrets import compare_digest
+from collections import defaultdict
 import re
 
 
@@ -180,3 +182,76 @@ class AuthorLoginForm(forms.Form):
             raise exp.ValidationError(
                 f"Username or password is incorrect.",
             )
+
+
+class AuthorRecipeForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self._form_erros = defaultdict(list)
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = recipe_models.Recipe
+        exclude = ['author', 'is_published', 'preparation_steps_is_html', 'created_at', 'updated_at', 'slug']
+
+        widgets = {
+            'title': forms.TextInput(attrs={
+                'placeholder': 'Title',
+                'class': 'form-control'
+            }),
+            'category': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'description': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'preparation_time': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+            'preparation_time_unit': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'preparation_steps': forms.Textarea(attrs={
+                'class': 'form-control'
+            }),
+            'servings': forms.NumberInput(attrs={
+                'class': 'form-control'
+            }),
+            'servings_unit': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'cover': forms.FileInput(attrs={
+                'class': 'form-control'
+            }),
+        }
+
+    def clean(self):
+        data = self.cleaned_data
+        try:
+            preparation_time = int(data.get('preparation_time'))
+        except (TypeError, ValueError):
+            preparation_time = 0
+
+        if preparation_time <= 0:
+            self._form_erros['preparation_time'].append('Preparation time must be greater than 0.')
+
+        try:
+            servings = int(data.get('servings'))
+        except (TypeError, ValueError):
+            servings = 0
+
+        if servings <= 0:
+            self._form_erros['servings'].append('Servings must be greater than 0.')
+
+        if len(data.get('title', '')) < 5:
+            self._form_erros['title'].append('Title must be at least 5 characters.')
+
+        if len(data.get('description', '')) < 5:
+            self._form_erros['description'].append('Description must be at least 5 characters.')
+
+        if data.get('description', '') == data.get('title', ''):
+            self._form_erros['__all__'].append('Description cannot be equal to title.')
+
+        if self._form_erros:
+            raise exp.ValidationError(self._form_erros)
+
+        return super().clean()
