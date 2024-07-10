@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.utils.text import slugify
+from random import choice
 
 # Create your models here.
 
@@ -14,7 +17,7 @@ class Category(models.Model):
 class Recipe(models.Model):
     title = models.CharField(max_length=65)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, max_length=70)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
     description = models.CharField(max_length=165)
@@ -31,3 +34,13 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('recipes:recipe_details', kwargs={'id': self.id})
+
+    def save(self, *args, **kwargs):
+        slug = slugify(str(self.title) + "-" + str(self.author.id))
+        while Recipe.objects.all().filter(slug=slug).first():
+            slug += choice('abcdefghijklmnopkrstuvwxyz')
+        self.slug = slug
+        return super().save()
