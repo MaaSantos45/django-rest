@@ -9,6 +9,7 @@ dependencies = [
     "Django",
     "python-dotenv",
     "pillow",
+    "Faker",
     "setuptools",
     "wheel",
 ]
@@ -28,3 +29,17 @@ dev = [
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = [
+    "core",
+    "static",
+    "authors",
+    "recipes",
+    "templates",
+    "static_base"
+]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*" = ["static/**", "templates/**"]
