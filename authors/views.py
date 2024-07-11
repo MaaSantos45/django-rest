@@ -72,7 +72,6 @@ def profile(request):
 
 @login_required(login_url='authors:login')
 def create_recipe(request):
-
     form = forms.AuthorRecipeForm(data=request.POST or None, files=request.FILES or None)
 
     if form.errors:

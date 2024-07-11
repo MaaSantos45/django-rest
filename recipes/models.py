@@ -36,7 +36,7 @@ class Recipe(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('recipes:recipe_details', kwargs={'id': self.id})
+        return reverse('recipes:recipe_details', kwargs={'id_recipe': self.id})
 
     def save(self, *args, **kwargs):
         slug = slugify(str(self.title) + "-" + str(self.author.id))

@@ -1,5 +1,5 @@
 from django.urls import reverse, resolve
-from authors import views
+from authors import views, class_views
 from . import AuthorTestBase
 
 # Create your tests here.
@@ -51,7 +51,8 @@ class AuthorViewTests(AuthorTestBase):
 
     def test_author_create_recipe_view_function(self):
         view = resolve(reverse('authors:create_recipe'))
-        self.assertIs(view.func, views.create_recipe)
+        # self.assertIs(view.func, views.create_recipe)
+        self.assertIs(view.func.view_class, class_views.DashboardView)
 
     def test_author_create_recipe_view_function_template(self):
         self.make_author(username=self.username, password=self.password)
@@ -61,7 +62,8 @@ class AuthorViewTests(AuthorTestBase):
 
     def test_author_edit_recipe_view_function(self):
         view = resolve(reverse('authors:edit_recipe', kwargs={'id_recipe': 1}))
-        self.assertIs(view.func, views.edit_recipe)
+        # self.assertIs(view.func, views.edit_recipe)
+        self.assertIs(view.func.view_class, class_views.DashboardView)
 
     def test_author_edit_recipe_view_function_template(self):
         self.make_recipe(author_data={'username': self.username, 'password': self.password})
@@ -71,7 +73,8 @@ class AuthorViewTests(AuthorTestBase):
 
     def test_author_delete_recipe_view_function(self):
         view = resolve(reverse('authors:delete_recipe', kwargs={'id_recipe': 1}))
-        self.assertIs(view.func, views.delete_recipe)
+        # self.assertIs(view.func, views.delete_recipe)
+        self.assertIs(view.func.view_class, class_views.DashboardViewDelete)
 
     def test_author_delete_recipe_view_function_template(self):
         self.make_recipe(author_data={'username': self.username, 'password': self.password})

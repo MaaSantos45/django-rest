@@ -1,7 +1,7 @@
 
 <div class="col-12 col-md-6 col-xl-4">
     <div class="card w-75 m-auto mb-5 shadow-lg shadow ">
-        <a href="{% url 'recipes:recipe_details' recipe.id %}">
+        <a href="{{ recipe.get_absolute_url }}">
 
             {% if recipe.cover %}
                 <img class="card-img card-img-top w-100" alt="Imagem" src="{{ recipe.cover.url }}">
@@ -75,7 +75,7 @@
         </div>
 
         <div class="text-center">
-            <a href="{% url 'recipes:recipe_details' recipe.id %}" class="btn w-100 g-0 card-body w-100 bg-black text-white link-underline-opacity-0">
+            <a href="{{ recipe.get_absolute_url }}" class="btn w-100 g-0 card-body w-100 bg-black text-white link-underline-opacity-0">
                 See More...
             </a>
         </div>
