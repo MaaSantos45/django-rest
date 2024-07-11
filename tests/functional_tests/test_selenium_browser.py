@@ -2,6 +2,7 @@ from django.test import LiveServerTestCase
 from utils.browser import make_browser
 
 
+@pytest.mark.functional_test
 class SeleniumTest(LiveServerTestCase):
     def setUp(self):
         return super().setUp()
