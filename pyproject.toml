@@ -13,7 +13,7 @@ dependencies = [
     "wheel",
 ]
 
-[project.optional-dependecies]
+[project.optional-dependencies]
 test = [
     "pytest",
     "pytest-django",
