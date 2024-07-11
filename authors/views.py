@@ -7,7 +7,10 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from recipes import models as recipe_models
 from utils.pagination import make_pagination
+from django.views.generic import View, TemplateView
+from django.utils.decorators import method_decorator
 from . import forms
+
 # Create your views here.
 
 
@@ -70,71 +73,66 @@ def profile(request):
     return render(request, 'authors/pages/profile.html', context={'recipes': page_obj, 'pagination_range': pagination_range})
 
 
-@login_required(login_url='authors:login')
-def create_recipe(request):
-    form = forms.AuthorRecipeForm(data=request.POST or None, files=request.FILES or None)
+@method_decorator(login_required(login_url='authors:login'), name='dispatch')
+class DashboardView(View):
 
-    if form.errors:
-        for field, errors in form.errors.items():
-            if field == '__all__':
-                field = 'fields'
-            messages.error(request, f"{field}: {', '.join(errors)}")
+    def get_recipe(self, id_recipe=None):
+        if id_recipe is None:
+            return None
+        recipe = recipe_models.Recipe.objects.filter(id=id_recipe, author=self.request.user).first()
+        if not recipe:
+            raise Http404('No recipe found')
+        return recipe
 
-    if request.method == 'POST' and form.is_valid():
-        recipe = form.save(commit=False)
-        recipe.author = request.user
-        recipe.is_published = False
-        recipe.preparation_steps_is_html = False
+    def get_form(self, recipe):
+        form = forms.AuthorRecipeForm(data=self.request.POST or None, files=self.request.FILES or None, instance=recipe)
 
-        recipe.cover = request.FILES.get('cover')
+        if form.errors:
+            for field, errors in form.errors.items():
+                if field == '__all__':
+                    field = 'fields'
+                messages.error(self.request, f"{field}: {', '.join(errors)}")
+        return form
 
-        recipe.save()
-        messages.success(request, 'Recipe Created, wait until review')
+    def render_recipe(self, form, recipe):
+        if recipe is not None and recipe.is_published:
+            messages.warning(self.request, "Recipe already published, if you update, it'll be unpublished for review")
+        return render(self.request, 'authors/pages/recipe-detail.html', context={"recipe": recipe, 'form': form})
+
+    def get(self, *args, **kwargs):
+        recipe = self.get_recipe(kwargs.get('id_recipe'))
+        form = self.get_form(recipe)
+        return self.render_recipe(form, recipe)
+
+    def post(self, *args, **kwargs):
+        recipe_instance = self.get_recipe(kwargs.get('id_recipe'))
+        form = self.get_form(recipe_instance)
+
+        if form.is_valid():
+            recipe = form.save(commit=False)
+            recipe.author = self.request.user
+            recipe.is_published = False
+            recipe.preparation_steps_is_html = False
+
+            recipe.cover = self.request.FILES.get('cover')
+
+            recipe.save()
+            if recipe_instance is None:
+                messages.success(self.request, 'Recipe Created, wait until review')
+            else:
+                messages.success(self.request, 'Recipe updated, wait until review')
+            return redirect(reverse('authors:profile'))
+        return self.render_recipe(form, recipe_instance)
+
+
+@method_decorator(login_required(login_url='authors:login'), name='dispatch')
+class DashboardViewDelete(DashboardView):
+    def get(self, *args, **kwargs):
         return redirect(reverse('authors:profile'))
 
-    return render(request, 'authors/pages/recipe-detail.html', context={'form': form})
-
-
-@login_required(login_url='authors:login')
-def edit_recipe(request, id_recipe):
-    recipe = recipe_models.Recipe.objects.filter(id=id_recipe, author=request.user).first()
-    if not recipe:
-        raise Http404('No recipe found')
-
-    form = forms.AuthorRecipeForm(data=request.POST or None, files=request.FILES or None, instance=recipe)
-
-    if form.errors:
-        for field, errors in form.errors.items():
-            if field == '__all__':
-                field = 'fields'
-            messages.error(request, f"{field}: {', '.join(errors)}")
-
-    if request.method == 'POST' and form.is_valid():
-        recipe = form.save(commit=False)
-        recipe.author = request.user
-        recipe.is_published = False
-        recipe.preparation_steps_is_html = False
-
-        recipe.cover = request.FILES.get('cover')
-
-        recipe.save()
-        messages.success(request, 'Recipe updated, wait until review')
-        return redirect(reverse('authors:profile'))
-
-    if recipe.is_published:
-        messages.warning(request, "Recipe already published, if you update, it'll be unpublished for review")
-
-    return render(request, 'authors/pages/recipe-detail.html', context={"recipe": recipe, 'form': form})
-
-
-@login_required(login_url='authors:login')
-def delete_recipe(request, id_recipe):
-    recipe = recipe_models.Recipe.objects.filter(id=id_recipe, author=request.user).first()
-    if not recipe:
-        raise Http404('No recipe found')
-
-    if request.method == 'POST' and recipe.author == request.user:
+    def post(self, *args, **kwargs):
+        recipe = self.get_recipe(kwargs.get('id_recipe'))
         recipe.delete()
-        messages.success(request, 'Recipe deleted')
+        messages.success(self.request, 'Recipe deleted')
 
-    return redirect(reverse('authors:profile'))
+        return redirect(reverse('authors:profile'))
