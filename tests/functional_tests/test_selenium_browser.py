@@ -1,5 +1,6 @@
 from django.test import LiveServerTestCase
 from utils.browser import make_browser
+import pytest
 
 
 @pytest.mark.functional_test
