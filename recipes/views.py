@@ -2,6 +2,8 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
 from recipes.models import Recipe
 from utils.pagination import make_pagination
 
@@ -34,6 +36,18 @@ class RecipeHomeView(RecipeListViewBase):
         if self.kwargs.get('id_category') is not None:
             qs = qs.filter(category__id=self.kwargs.get('id_category'))
         return qs
+
+
+class RecipeHomeViewApi(RecipeHomeView):
+    template_name = 'recipes/pages/home.html'
+
+    def render_to_response(self, context, **response_kwargs):
+        recipes = self.get_context_data()['recipes'].object_list.values()
+
+        return JsonResponse({
+            'recipes': list(recipes),
+            'len': len(recipes),
+        })
 
 
 class RecipeSearchView(RecipeListViewBase):
@@ -84,3 +98,22 @@ class RecipeDetailView(DetailView):
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset()
         return qs.filter(is_published=True)
+
+
+class RecipeDetailViewApi(RecipeDetailView):
+    template_name = 'recipes/pages/recipe-detail.html'
+
+    def render_to_response(self, context, **response_kwargs):
+        recipe = self.get_context_data()['recipe']
+        created_at, updated_at = recipe.created_at, recipe.updated_at
+
+        recipe = model_to_dict(recipe, exclude=['is_published'])
+        recipe['created_at'] = created_at
+        recipe['updated_at'] = updated_at
+
+        if recipe.get('cover'):
+            recipe['cover'] = self.request.build_absolute_uri()[:-1] + recipe['cover'].url
+
+        return JsonResponse({
+            'recipe': recipe,
+        })
