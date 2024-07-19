@@ -23,7 +23,7 @@ test = [
     "selenium"
 ]
 dev = [
-    "Faker",
+    "django-debug-toolbar",
 ]
 
 [build-system]
