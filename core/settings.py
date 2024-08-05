@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants
+from utils.environment import comma_to_string
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,9 +29,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', "INSECURE")
 # noinspection DjangoDebugModeSettings
 DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
-ALLOWED_HOSTS = [
-    "*"
-]
+ALLOWED_HOSTS = comma_to_string('ALLOWED_HOSTS')
+
+CSRF_TRUSTED_ORIGINS = comma_to_string('CSRF_TRUSTED_ORIGINS')
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -162,3 +163,5 @@ MESSAGE_TAGS = {
     constants.WARNING: 'warning',
     constants.ERROR: 'danger',
 }
+
+
