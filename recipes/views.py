@@ -19,6 +19,7 @@ class RecipeListViewBase(ListView):
         qs = super().get_queryset()
         qs = qs.filter(is_published=True)
         qs = qs.select_related('author', 'category')
+        qs = qs.prefetch_related('tags')
         return qs
 
     def get_context_data(self, *args, **kwargs):
@@ -90,6 +91,22 @@ class RecipeSearchView(RecipeListViewBase):
         return context
 
 
+class RecipeTagView(RecipeListViewBase):
+    template_name = 'recipes/pages/home.html'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        qs = qs.filter(is_published=True)
+        qs = qs.filter(
+            Q(tags__slug=self.kwargs.get('slug', ''))
+        )
+        return qs
+
+
 class RecipeDetailView(DetailView):
     model = Recipe
     context_object_name = 'recipe'
@@ -98,6 +115,9 @@ class RecipeDetailView(DetailView):
 
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset()
+        qs = qs.select_related('author', 'category',)
+        qs = qs.prefetch_related('tags',)
+
         return qs.filter(is_published=True)
 
 

@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.contenttypes import fields
 from django.urls import reverse
 from django.utils.text import slugify
 from random import choice
+from tags.models import Tag
 
 # Create your models here.
 
@@ -19,6 +21,8 @@ class Recipe(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True, max_length=70)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+
+    tags = fields.GenericRelation(Tag, related_query_name='recipes')
 
     description = models.CharField(max_length=165)
     preparation_time = models.IntegerField()
@@ -43,4 +47,4 @@ class Recipe(models.Model):
         while Recipe.objects.all().filter(slug=slug).first():
             slug += choice('abcdefghijklmnopkrstuvwxyz')
         self.slug = slug
-        return super().save()
+        return super().save(*args, **kwargs)
