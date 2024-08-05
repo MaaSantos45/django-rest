@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.contenttypes import fields
+# from django.contrib.contenttypes import fields
 from django.urls import reverse
 from django.utils.text import slugify
 from random import choice
@@ -10,6 +10,9 @@ from tags.models import Tag
 
 
 class Category(models.Model):
+    class Meta:
+        verbose_name_plural = "categories"
+
     name = models.CharField(max_length=60)
 
     def __str__(self):
@@ -22,7 +25,8 @@ class Recipe(models.Model):
     slug = models.SlugField(unique=True, max_length=70)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
-    tags = fields.GenericRelation(Tag, related_query_name='recipes')
+    # tags = fields.GenericRelation(Tag, related_query_name='recipes')
+    tags = models.ManyToManyField(Tag, related_name='recipes',)
 
     description = models.CharField(max_length=165)
     preparation_time = models.IntegerField()

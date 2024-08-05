@@ -10,10 +10,10 @@ class Tag(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
 
-    content_type = models.ForeignKey(fields.ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-
-    content_object = fields.GenericForeignKey('content_type', 'object_id')
+    # content_type = models.ForeignKey(fields.ContentType, on_delete=models.CASCADE)
+    # object_id = models.PositiveIntegerField()
+    #
+    # content_object = fields.GenericForeignKey('content_type', 'object_id')
 
     def save(self, *args, **kwargs):
         slug = slugify(str(self.name))
@@ -21,3 +21,6 @@ class Tag(models.Model):
             slug += choice('abcdefghijklmnopkrstuvwxyz')
         self.slug = slug
         return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
