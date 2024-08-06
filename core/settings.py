@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
     # Third Party
     "debug_toolbar",
+    "django_select2",
 
     # Apps
     'recipes',
@@ -105,6 +106,18 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    'select2': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        # 'LOCATION': '127.0.0.1:11211',
+        'TIMEOUT': 60 * 60 * 24,
+    }
+}
+
+SELECT2_CACHE_BACKEND = 'select2'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

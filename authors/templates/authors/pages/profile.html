@@ -2,6 +2,20 @@
 
 {% block content %}
     <section class="container-fluid g-5 mt-5 min-vh-100 w-100 justify-content-center">
+        <div class="row justify-content-center w-100 mb-5">
+            <div class="col col-md-6 mx-auto">
+                <h2 class="text-center">Profile</h2>
+                <p class="text-center">
+                    {{ profile }}
+                </p>
+                <form action="" class="text-center">
+                    <label class="w-100">
+
+                        <textarea class="form-control w-100" rows="5">{{ profile.bio }}</textarea>
+                    </label>
+                </form>
+            </div>
+        </div>
 
         <div class="row w-100 justify-content-center">
             <div class="col-auto">

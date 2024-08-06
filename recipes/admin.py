@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline, GenericTabularInline
 from . import models
-# from tags.models import Tag
+from tags.models import Tag
 
 # Register your models here.
 

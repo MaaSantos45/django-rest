@@ -26,7 +26,7 @@ class Recipe(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
 
     # tags = fields.GenericRelation(Tag, related_query_name='recipes')
-    tags = models.ManyToManyField(Tag, related_name='recipes',)
+    tags = models.ManyToManyField(Tag, related_name='recipes', blank=True)
 
     description = models.CharField(max_length=165)
     preparation_time = models.IntegerField()

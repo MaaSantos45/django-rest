@@ -20,7 +20,7 @@ def make_recipes(qtd=1):
             "preparation_time_unit": choice(["Minutos", "Horas"]),
             "preparation_steps": faker.text(3000),
             "servings": faker.random_number(digits=2, fix_len=True),
-            "servings_unit": choice(["Porção", "Pessoa"]),
+            "servings_unit": choice(["Portion", "People"]),
             "created_at": faker.date_time(),
             "author": {
                 "first_name": faker.first_name(),

@@ -2,7 +2,15 @@
 <html lang="en">
 
 {% load static %}
-{% include 'global/partials/head.html' %}
+
+<head>
+    <title>Home</title>
+
+    {% include 'global/partials/head.html' %}
+
+    {% block link %}
+    {% endblock link %}
+</head>
 
 <body>
 
@@ -24,6 +32,7 @@
         {% endblock footer %}
     </main>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'global/js/popper.min.js' %}" crossorigin="anonymous"></script>
     <script src="{% static 'global/js/bootstrap.min.js' %}" crossorigin="anonymous"></script>
     <script src="{% static 'global/js/init-bootstrap.js' %}" crossorigin="anonymous"></script>

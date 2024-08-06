@@ -1,5 +1,9 @@
 {% extends 'global/pages/base.html' %}
 
+{% block link %}
+    {{ form.media.css }}
+{% endblock link %}
+
 {% block content %}
     <section class="container-fluid g-5 mt-5 min-vh-100">
 
@@ -42,4 +46,5 @@
 {% block script %}
     {% load static %}
     <script src="{% static 'global/js/delete-confirm.js' %}" crossorigin="anonymous"></script>
+    {{ form.media.js }}
 {% endblock %}

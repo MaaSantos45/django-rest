@@ -1,4 +1,4 @@
-from django.contrib.contenttypes import fields
+# from django.contrib.contenttypes import fields
 from django.db import models
 from random import choice
 from django.utils.text import slugify

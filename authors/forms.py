@@ -5,6 +5,7 @@ from django.core import exceptions as exp
 from recipes import models as recipe_models
 from secrets import compare_digest
 from collections import defaultdict
+from django_select2 import forms as s2forms
 import re
 
 
@@ -201,6 +202,15 @@ class AuthorRecipeForm(forms.ModelForm):
             'category': forms.Select(attrs={
                 'class': 'form-select'
             }),
+            'tags': s2forms.ModelSelect2MultipleWidget(
+                attrs={
+                    'class': 'form-select'
+                },
+                model=recipe_models.Tag,
+                search_fields=[
+                    "name__icontains"
+                ]
+            ),
             'description': forms.TextInput(attrs={
                 'class': 'form-control'
             }),
