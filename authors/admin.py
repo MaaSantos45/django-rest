@@ -8,4 +8,4 @@ class AuthorAdmin(admin.ModelAdmin):
     ...
 
 
-admin.register(Profile, AuthorAdmin)
+admin.site.register(Profile, AuthorAdmin)

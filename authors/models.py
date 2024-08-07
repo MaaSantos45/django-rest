@@ -9,4 +9,4 @@ class Profile(models.Model):
     bio = models.TextField(default='', blank=True)
 
     def __str__(self):
-        return self.author.get_full_name()
+        return self.author.get_full_name() or self.author.username
