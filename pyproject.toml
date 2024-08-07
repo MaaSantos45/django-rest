@@ -11,6 +11,7 @@ dependencies = [
     "pillow",
     "Faker",
     "django-select2",
+    "djangorestframework",
     "setuptools",
     "wheel",
 ]
@@ -35,8 +36,8 @@ build-backend = "setuptools.build_meta"
 packages = [
     "core",
     "static",
-    "authors",
-    "recipes",
+#    "authors",
+#    "recipes",
     "templates",
     "static_base"
 ]

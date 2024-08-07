@@ -13,7 +13,7 @@ def create_recipe_img(**kwargs):
 
     old = Recipe.objects.filter(pk=instance.pk).first()
 
-    if old.cover and instance.cover != old.cover:
+    if old and old.cover and instance.cover != old.cover:
         path = old.cover.path
         try:
             os.remove(path)
@@ -24,7 +24,7 @@ def create_recipe_img(**kwargs):
 @receiver(pre_delete, sender=Recipe)
 def delete_recipe_img(**kwargs):
     instance = kwargs.get('instance')
-    if instance:
+    if instance and instance.cover:
         path = instance.cover.path
         try:
             os.remove(path)

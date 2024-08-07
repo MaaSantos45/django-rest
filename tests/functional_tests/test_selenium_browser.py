@@ -6,7 +6,7 @@ import pytest
 @pytest.mark.functional_test
 class SeleniumTest(LiveServerTestCase):
     def setUp(self):
-        return super().setUp()
+        return super().setUp
 
     def tearDown(self):
         return super().tearDown()

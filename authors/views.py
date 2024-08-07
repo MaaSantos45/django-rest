@@ -71,7 +71,7 @@ def logout(request):
 #     recipes = recipe_models.Recipe.objects.filter(author=request.user).order_by('-created_at').order_by('-updated_at')
 #     page_obj, pagination_range = make_pagination(request, recipes)
 #     return render(request, 'authors/pages/profile.html', context={'recipes': page_obj, 'pagination_range': pagination_range})
-@method_decorator(login_required, name='dispatch')
+@method_decorator(login_required(login_url='authors:login'), name='dispatch')
 class ProfileView(TemplateView):
     template_name = 'authors/pages/profile.html'
 

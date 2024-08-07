@@ -11,7 +11,7 @@ class BaseFunctionalTests(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = make_browser()
         self.actions = ActionChains(self.browser)
-        return super().setUp()
+        return super().setUp
 
     def tearDown(self):
         self.browser.quit()

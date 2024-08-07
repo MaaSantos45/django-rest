@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # Third Party
     "debug_toolbar",
     "django_select2",
+    "rest_framework",
 
     # Apps
     'recipes',
