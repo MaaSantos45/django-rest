@@ -6,6 +6,7 @@ from recipes import models as recipe_models
 from secrets import compare_digest
 from collections import defaultdict
 from django_select2 import forms as s2forms
+from recipes.validators import RecipeValidator
 import re
 
 
@@ -236,32 +237,5 @@ class AuthorRecipeForm(forms.ModelForm):
 
     def clean(self):
         data = self.cleaned_data
-        try:
-            preparation_time = int(data.get('preparation_time'))
-        except (TypeError, ValueError):
-            preparation_time = 0
-
-        if preparation_time <= 0:
-            self._form_erros['preparation_time'].append('Preparation time must be greater than 0.')
-
-        try:
-            servings = int(data.get('servings'))
-        except (TypeError, ValueError):
-            servings = 0
-
-        if servings <= 0:
-            self._form_erros['servings'].append('Servings must be greater than 0.')
-
-        if len(data.get('title', '')) < 5:
-            self._form_erros['title'].append('Title must be at least 5 characters.')
-
-        if len(data.get('description', '')) < 5:
-            self._form_erros['description'].append('Description must be at least 5 characters.')
-
-        if data.get('description', '') == data.get('title', ''):
-            self._form_erros['__all__'].append('Description cannot be equal to title.')
-
-        if self._form_erros:
-            raise exp.ValidationError(self._form_erros)
-
+        RecipeValidator(data)
         return super().clean()
