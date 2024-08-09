@@ -9,7 +9,7 @@ from recipes import models as recipe_models
 from utils.pagination import make_pagination
 from django.views.generic import View, TemplateView
 from django.utils.decorators import method_decorator
-from . import forms, models
+from authors import forms, models
 
 # Create your views here.
 

@@ -2,6 +2,8 @@ from django.core.paginator import Paginator
 import math
 import os
 
+from rest_framework import pagination
+
 PER_PAGE = int(os.environ.get('PAGINATION_PER_PAGE', 10))
 QTD_PAGE = int(os.environ.get('PAGINATION_QTD_PAGE', 10))
 
@@ -53,3 +55,7 @@ def make_pagination(request, queryset, per_page=None, qtd_pages=None):
     )
 
     return page_obj, pagination_range
+
+
+class RecipePagination(pagination.PageNumberPagination):
+    page_size = PER_PAGE

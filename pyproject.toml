@@ -12,6 +12,7 @@ dependencies = [
     "Faker",
     "django-select2",
     "djangorestframework",
+    "djangorestframework-simplejwt",
     "setuptools",
     "wheel",
 ]
@@ -34,12 +35,12 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 packages = [
-    "core",
     "static",
-#    "authors",
-#    "recipes",
     "templates",
     "static_base"
+#    "core",
+#    "authors",
+#    "recipes",
 ]
 include-package-data = true
 
